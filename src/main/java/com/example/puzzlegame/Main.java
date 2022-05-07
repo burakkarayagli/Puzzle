@@ -16,38 +16,19 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+        Game game = new Game("level1.txt");
 
         BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(game.getGrid());
 
-        new Image();
-        File currentDir = new File()
-        System.out.println(currentDir.toPath());
-
-//        File file = new File("level1.txt");
-//        Scanner scanner = new Scanner(file);
-//        System.out.println(scanner.nextLine());
-
-        //Pane grid = makeGrid();
 
         Scene scene = new Scene(borderPane,500,500);
-
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
     }
 
-    /*public Pane makeGrid() {
-        for (int i = 0; i < size; i += squareSize) {
-            for (int j = 0; j < size; j += squareSize) {
-                Rectangle r = new Rectangle(i, j, squareSize, squareSize);
-                grid[i / squareSize][j / squareSize] = r;
-                r.setFill(Color.WHITE);
-                r.setStroke(Color.BLACK);
-                pane.getChildren().add(r);
-            }
-        }
-    }*/
 
     public static void main(String[] args) {
         launch();
