@@ -16,7 +16,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Game game = new Game("level1.txt");
+        Game game = new Game("level5.txt");
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(game.getGrid());
