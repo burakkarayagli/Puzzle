@@ -22,7 +22,7 @@ public class Main extends Application {
         borderPane.setCenter(game.getGrid());
 
 
-        Scene scene = new Scene(borderPane,500,500);
+        Scene scene = new Scene(borderPane,600,600);
 
         stage.setTitle("Hello!");
         stage.setScene(scene);

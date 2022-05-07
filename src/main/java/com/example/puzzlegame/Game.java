@@ -27,10 +27,10 @@ public class Game {
         for (int row = 0; row < rowNum; row++) {
             for (int column = 0; column < colNum; column++,tile++) {
                 ImageView img = level.get(tile).getImage();
-                img.setFitHeight(125);
-                img.setFitWidth(125);
+                img.setFitHeight(150);
+                img.setFitWidth(150);
 
-                grid.add(img, row, column);
+                grid.add(img, column, row);
             }
         }
         return grid;
