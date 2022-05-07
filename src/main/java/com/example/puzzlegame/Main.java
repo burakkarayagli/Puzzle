@@ -17,7 +17,7 @@ public class Main extends Application {
 
 
 
-        ImageView img = new ImageView(new Image(getClass().getResource("/EmptyFree.jpg").toString()));
+        ImageView img = new ImageView();
         borderPane.setCenter(img);
 
         //Pane grid = makeGrid();

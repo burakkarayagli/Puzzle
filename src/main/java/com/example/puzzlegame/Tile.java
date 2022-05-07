@@ -1,5 +1,6 @@
 package com.example.puzzlegame;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Tile{
@@ -18,13 +19,13 @@ public class Tile{
         setProperty(tile.property);
         setImage(tile.image);
     }
-    // constructor
+    //Constructor with attributions
     public Tile(int id, String type, String property) {
         setTileId(id);
         setType(type);
         setProperty(property);
         try {
-            determineImage();
+            findImage();
         }catch(Exception e){
             System.out.println(e);
         }
@@ -63,69 +64,60 @@ public class Tile{
         return image;
     }
 
-    //setting the image from a file of a tile
-    private void determineImage() {
+    //Finding and setting the image of tile
+    private void findImage() {
 
         if (type.equalsIgnoreCase("Starter")) { // blue starter
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView("Tiles\\StarterVertical.png");
+                image = new ImageView(new Image(getClass().getResource("/StarterVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView("blueHor.png");
+                image = new ImageView(new Image(getClass().getResource("/StarterHorizontal.jpg").toString()));
 
             }
 
         } else if (type.equalsIgnoreCase("End")) { // red end
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView("redVer.png");
+                image = new ImageView(new Image(getClass().getResource("/EndVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView("redHor.png");
+                image = new ImageView(new Image(getClass().getResource("/EndHorizontal.jpg").toString()));
 
             }
         } else if (type.equalsIgnoreCase("Empty")) {
             if (property.equalsIgnoreCase("none")) { // grey pile
-                image = new ImageView("empty.png");
+                image = new ImageView(new Image(getClass().getResource("/EmptyNone.jpg").toString()));
             } else if (property.equalsIgnoreCase("Free")) {
-                image = new ImageView("free.png");
+                image = new ImageView(new Image(getClass().getResource("/EmptyFree.jpg").toString()));
 
             }
         } else if (type.equalsIgnoreCase("PipeStatic")) { // fix blue pile
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView("blueStaticVer.png");
+                image = new ImageView(new Image(getClass().getResource("/PipeStaticVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView("blueStaticHor.png");
-
-            }else if (property.equalsIgnoreCase("00")) {
-                image = new ImageView("static00.png");
-            }else if (property.equalsIgnoreCase("01")) {
-                image = new ImageView("static01.png");
-            }else if (property.equalsIgnoreCase("10")) {
-                image = new ImageView("static10.png");
-            }else if (property.equalsIgnoreCase("11")) {
-                image = new ImageView("static11.png");
+                image = new ImageView(new Image(getClass().getResource("/PipeStaticHorizontal.jpg").toString()));
             }
 
         } else if (type.equalsIgnoreCase("Pipe")) {
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView("vertical.png");
+                image = new ImageView(new Image(getClass().getResource("/PipeVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView("horizontal.png");
+                image = new ImageView(new Image(getClass().getResource("/PipeHorizontal.jpg").toString()));
             }else if (property.equalsIgnoreCase("00")) {
-                image = new ImageView("00.png");
+                image = new ImageView(new Image(getClass().getResource("/Pipe00.jpg").toString()));
             }else if (property.equalsIgnoreCase("01")) {
-                image = new ImageView("01.png");
+                image = new ImageView(new Image(getClass().getResource("/Pipe01.jpg").toString()));
             }else if (property.equalsIgnoreCase("10")) {
-                image = new ImageView("10.png");
+                image = new ImageView(new Image(getClass().getResource("/Pipe10.jpg").toString()));
             }else if (property.equalsIgnoreCase("11")) {
-                image = new ImageView("11.png");
+                image = new ImageView(new Image(getClass().getResource("/Pipe11.jpg").toString()));
             }
         }
     }
 
-    //information about a tile
+    //To String Method
     @Override
     public String toString() {
         return "Id: " + id + " Property: " + property + "Type: " + type ;
