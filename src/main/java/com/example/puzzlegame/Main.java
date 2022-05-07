@@ -7,18 +7,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
+
 
         BorderPane borderPane = new BorderPane();
 
+        new Image();
+        File currentDir = new File()
+        System.out.println(currentDir.toPath());
 
-
-        ImageView img = new ImageView();
-        borderPane.setCenter(img);
+//        File file = new File("level1.txt");
+//        Scanner scanner = new Scanner(file);
+//        System.out.println(scanner.nextLine());
 
         //Pane grid = makeGrid();
 
