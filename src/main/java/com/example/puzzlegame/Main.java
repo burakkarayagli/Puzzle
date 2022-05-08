@@ -37,7 +37,7 @@ public class Main extends Application {
 
         control.getChildren().addAll(buttonPrev,buttonNext,button1,button2,button3);
 
-        Game game = new Game(Game.LevelReader("level2.txt"));
+        Game game = new Game(Game.LevelReader("level1.txt"));
         Game game2 = new Game(Game.LevelReader("level2.txt"));
 
         Tile starter = new Tile(5, "Starter", "Vertical");
@@ -59,7 +59,7 @@ public class Main extends Application {
             {
                 if (borderPane.getCenter().equals(game.getGrid())) {
                     borderPane.setCenter(game2.getGrid());
-            }
+                }
                 else borderPane.setCenter(game.getGrid());
             }
         };
@@ -68,12 +68,17 @@ public class Main extends Application {
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
+        stage.setResizable(false);
+
+        // Set background color
+        borderPane.setStyle("-fx-background-color:#4f4f4f");
+
         stage.show();
     }
 
 
     public static void main(String[] args) {
+
         launch();
     }
 }
-

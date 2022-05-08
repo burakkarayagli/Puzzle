@@ -126,8 +126,8 @@ public class Game {
     public GridPane createGame(ArrayList<Tile> level) throws Exception {
         grid = new GridPane();
         int tile = 0;
-        for (int row = 0; row < rowNum; row++) {
-            for (int column = 0; column < colNum; column++,tile++) {
+        for (int row = 0; row < colNum; row++) {
+            for (int column = 0; column < rowNum; column++,tile++) {
                 Tile img = level.get(tile);
                 img.setFitHeight(150);
                 img.setFitWidth(150);
