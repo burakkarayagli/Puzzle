@@ -1,5 +1,6 @@
 package com.example.puzzlegame;
 
+import javafx.animation.PathTransition;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -12,8 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,17 +28,22 @@ public class Game {
     GridPane grid;
     private final int rowNum = 4;
     private final int colNum = 4;
+
+    private Circle ball;
+
+    private final double tileSize = 150;
     private Tile[][] tile2d = new Tile[rowNum][colNum];
 
     public Game(ArrayList<Tile> level) throws Exception {
         tiles = level;
         grid = createGame(level);
+        addBall();
 
     }
     private double startX, startY;
     private void makeDraggable(Tile tile) {
         //If tile is not (Starter, End, Pipestatic, Free)
-        if (!(tile.getType().equalsIgnoreCase("Starter") ||
+        if (true || !(tile.getType().equalsIgnoreCase("Starter") ||
                 tile.getType().equalsIgnoreCase("End") ||
                 tile.getType().equalsIgnoreCase("PipeStatic") ||
                 tile.getProperty().equalsIgnoreCase("Free"))) {
@@ -74,7 +81,7 @@ public class Game {
 
 
 
-                if(targetTile.getProperty().equalsIgnoreCase("Free") &&
+                if(true || targetTile.getProperty().equalsIgnoreCase("Free") &&
                         ((targetCol == currentCol && (targetRow == currentRow+1 || targetRow == currentRow-1)) ||
                          (targetRow == currentRow && (targetCol == currentCol+1 || targetCol == currentCol-1)))) {
                     moveTiles(tile, targetTile);
@@ -182,13 +189,11 @@ public class Game {
         int targetRow = GridPane.getRowIndex(target);
         int targetCol = GridPane.getColumnIndex(target);
 
+        Tile tempCur = current;
         int indexCur = currentRow*4+currentCol+1;
         int indexTar = targetRow*4+targetCol+1;
-
-        Tile tempCur = current;
-
-        //tiles.set(indexCur, target);
-        //tiles.set(indexTar, tempCur);
+        tiles.set(indexCur-1, target);
+        tiles.set(indexTar-1, tempCur);
 
         grid.getChildren().removeAll(current, target);
         current.setTranslateX(startX);
@@ -202,11 +207,120 @@ public class Game {
         tile2d[currentRow][currentCol] = target;
 
 
+
+
         //System.out.println("Curr" + currentRow + "|" + currentCol + "index: " + indexCur);
         //System.out.println("Target" + targetRow + "|" + targetCol + "index: " + indexTar);
         moveCounter++;
 
         Main.MoveCount.setText("Move Count: " + getMoveCounter());
+        //createPath(tile2d);
+
+
     }
 
+    public void addBall() {
+        //Creating ball
+        ball = new Circle();
+
+        ball.setRadius(13.5);
+        ball.setCenterX(tileSize);
+        ball.setCenterY(tileSize/2);
+        ball.setFill(Color.YELLOW);
+        ball.setStrokeWidth(0.2);
+        ball.setStroke(Color.BLACK);
+        getGrid().getChildren().add(ball);
+
+    }
+
+    public boolean createPath(Tile[][] tile2d) {
+
+
+        Tile starterTile = null, endTile = null;
+
+        //Finding the starter and end tile
+        for (int row = 0; row < rowNum; row++) {
+            for (int col = 0; col < colNum; col++) {
+                if (tile2d[row][col].getType().equalsIgnoreCase("Starter")) {
+                    starterTile = tile2d[row][col];
+                }
+                if (tile2d[row][col].getType().equalsIgnoreCase("End")) {
+                    endTile = tile2d[row][col];
+                }
+            }
+        }
+
+        int rowStarter = tileIndexFinder(starterTile)[0];
+        int colStarter = tileIndexFinder(starterTile)[1];
+
+        Path path = new Path();
+
+        path.getElements().add(new MoveTo(rowStarter*tileSize+tileSize/2,
+                colStarter*tileSize+tileSize/2));
+
+        Tile current = starterTile;
+        boolean a = true;
+        while (a) {
+
+            int curRow = tileIndexFinder(current)[0];
+            int curCol = tileIndexFinder(current)[1];
+//            Tile upTile = tile2d[curRow-1][curCol];
+//            Tile downTile = tile2d[curRow+1][curCol];
+//            Tile rightTile = tile2d[curRow][curCol+1];
+//            Tile leftTile = tile2d[curRow][curCol-1];
+
+            //Starter Vertical
+            if (current.getType().equalsIgnoreCase("Starter") &&
+                    current.getProperty().equalsIgnoreCase("Vertical")) {
+                    Tile downTile = tile2d[curRow+1][curCol];
+                    path.getElements().add(new LineTo(rowStarter*tileSize+tileSize/2, colStarter*tileSize+tileSize));
+
+                if (downTile.getProperty().equalsIgnoreCase("Vertical")) {
+                    double downX = curRow+1 * tileSize + tileSize/2;
+                    double downY = curRow+1 * tileSize + tileSize;
+                    path.getElements().add(new LineTo(downX, downY));
+
+                    current = downTile;
+
+                }
+
+                else if (downTile.getProperty().equalsIgnoreCase("00")) {
+
+                }
+
+                else if (downTile.getProperty().equalsIgnoreCase("01")) {
+
+                }
+
+            }
+
+            else if (current.getProperty().equalsIgnoreCase("Vertical")) {
+                Tile downTile = tile2d[curRow+1][curCol];
+
+                if (downTile.getProperty().equalsIgnoreCase("Vertical")) {
+                    double downX = curRow+1 * tileSize + tileSize/2;
+                    double downY = curRow+1 * tileSize + tileSize;
+                    path.getElements().add(new LineTo(downX, downY));
+                    a = false;
+
+                }
+
+            }
+
+        }
+
+        PathTransition pathTransition = new PathTransition();
+
+        pathTransition.setPath(path);
+        pathTransition.setNode(ball);
+        pathTransition.setDuration(Duration.seconds(3));
+        pathTransition.play();
+
+
+
+
+
+
+        return false;
+    }
 }

@@ -1,4 +1,4 @@
-1,Starter,Vertical
+1,Starter,Horizontal
 2,Empty,none
 3,Empty,none
 4,Empty,none

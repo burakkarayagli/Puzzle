@@ -6,7 +6,7 @@
 6,Pipe,Horizontal
 7,Empty,Free
 8,End,Vertical
-9,PipeStatic,01
+9,Pipe,01
 10,Pipe,Vertical
 11,Pipe,Horizontal
 12,Empty,none
