@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,10 +25,16 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Button button = new Button("scene size");
+        HBox control = new HBox();
+        Button buttonPrev = new Button("Prev Level");
+        Button buttonNext = new Button("Next Level");
 
+        control.setAlignment(Pos.CENTER);
+        buttonNext.setAlignment(Pos.CENTER);
 
-        Game game = new Game(Game.LevelReader("level3.txt"));
+        control.getChildren().addAll(buttonPrev,buttonNext);
+
+        Game game = new Game(Game.LevelReader("level6.txt"));
         Game game2 = new Game(Game.LevelReader("level2.txt"));
 
         Tile starter = new Tile(5, "Starter", "Vertical");
@@ -36,19 +43,17 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         GridPane grid = game.getGrid();
         borderPane.setCenter(grid);
+        borderPane.setBottom(control);
 
-        button.setPrefHeight(30);
+        control.setPrefHeight(100);
 
-        Scene scene = new Scene(borderPane,600,600);
+        Scene scene = new Scene(borderPane,700,700);
         stage.setResizable(true);
 
 
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
             {
-                System.out.println(borderPane.getCenter().getScene());
-                System.out.println(borderPane.getCenter().getScaleY());
-
                 if (borderPane.getCenter().equals(game.getGrid())) {
                     borderPane.setCenter(game2.getGrid());
             }
@@ -56,7 +61,7 @@ public class Main extends Application {
             }
         };
 
-        button.setOnAction(event);
+        buttonPrev.setOnAction(event);
 
         stage.setTitle("Hello!");
         stage.setScene(scene);

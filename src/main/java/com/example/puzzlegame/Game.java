@@ -30,94 +30,77 @@ public class Game {
     public Game(ArrayList<Tile> level) throws Exception {
         tiles = level;
         grid = createGame(level);
-        makeDraggable(tiles);
+
     }
 
 
 
     private double startX, startY;
-    private void makeDraggable(ArrayList<Tile> tiles) {
+    private void makeDraggable(Tile tile) {
 
-        for (Tile tile:
-             tiles) {
-            //If tile is not (Starter, End, Pipestatic, Free)
-            if (true) {
-                
-                tile.setOnMousePressed(e -> {
-                    //System.out.println(tile + "bastin");
-                    startX = e.getSceneX() - tile.getTranslateX();
-                    startY = e.getSceneY() - tile.getTranslateY();
-                    //tile.setEffect(new Glow());
-                    tile.toFront();
-                });
 
-                tile.setOnMouseEntered(e -> {
-                    System.out.println("Row: " + GridPane.getRowIndex(tile));
-                    System.out.println("Column: " + GridPane.getColumnIndex(tile));
-                });
+        //If tile is not (Starter, End, Pipestatic, Free)
+        if (!(tile.getType().equalsIgnoreCase("Starter") ||
+                tile.getType().equalsIgnoreCase("End") ||
+                tile.getType().equalsIgnoreCase("PipeStatic") ||
+                tile.getProperty().equalsIgnoreCase("Free"))) {
 
-                tile.setOnMouseDragged(e -> {
-                    //TODO Sinirlardan disari cikarmayi engelle
-                    tile.setTranslateX(e.getSceneX()-startX);
-                    tile.setTranslateY(e.getSceneY()-startY);
-                });
+            tile.setOnMousePressed(e -> {
+                //System.out.println(tile + "bastin");
+                startX = e.getSceneX() - tile.getTranslateX();
+                startY = e.getSceneY() - tile.getTranslateY();
+                tile.setEffect(new Glow());
+                tile.toFront();
+            });
 
-                tile.setOnMouseReleased(e -> {
-                    double targetX = e.getSceneX();
-                    double targetY = e.getSceneY();
+            tile.setOnMouseEntered(e -> {
+                //System.out.println("Row: " + GridPane.getRowIndex(tile));
+                //System.out.println("Column: " + GridPane.getColumnIndex(tile));
+            });
 
-                    int targetRow = gridIndexFinder(targetX,targetY)[0];
-                    int targetCol = gridIndexFinder(targetX,targetY)[1];
+            tile.setOnMouseDragged(e -> {
+                //TODO Sinirlardan disari cikarmayi engelle
+                tile.setTranslateX(e.getSceneX()-startX);
+                tile.setTranslateY(e.getSceneY()-startY);
+            });
 
-                    Tile targetTile = tile2d[targetRow][targetCol];
+            tile.setOnMouseReleased(e -> {
+                double targetX = e.getSceneX();
+                double targetY = e.getSceneY();
 
+                int currentRow = GridPane.getRowIndex(tile);
+                int currentCol = GridPane.getColumnIndex(tile);
+                int targetRow = gridIndexFinder(targetX,targetY)[0];
+                int targetCol = gridIndexFinder(targetX,targetY)[1];
+
+                Tile targetTile = tile2d[targetRow][targetCol];
+
+
+
+
+                if(targetTile.getProperty().equalsIgnoreCase("Free") &&
+                        ((targetCol == currentCol && (targetRow == currentRow+1 || targetRow == currentRow-1)) ||
+                         (targetRow == currentRow && (targetCol == currentCol+1 || targetCol == currentCol-1)))) {
                     moveTiles(tile, targetTile);
-                    tile.setTranslateX(startX);
-                    tile.setTranslateY(startY);
+                }
+
+                else {
+                    tile.setTranslateX(0);
+                    tile.setTranslateY(0);
+                }
 
 
-                    System.out.println("Satir" + gridIndexFinder(targetX,targetY)[0]);
-                    System.out.println("Sutun" + gridIndexFinder(targetX,targetY)[1]);
+                System.out.println("Satir" + gridIndexFinder(targetX,targetY)[0]);
+                System.out.println("Sutun" + gridIndexFinder(targetX,targetY)[1]);
 
 
 
-                    tile.setEffect(null);
-                    //System.out.println(tile + "biraktin");
-                });
-
-            }
-
+                tile.setEffect(null);
+                //System.out.println(tile + "biraktin");
+            });
 
         }
-
-
     }
-
-    /*private void move() {
-
-        for (Node node:
-             getGrid().getChildren()) {
-            node.setOnMousePressed(e-> {
-                System.out.println(node + "tiklandi");
-                startX = e.getSceneX() - node.getTranslateX();
-                startY = e.getSceneY() - node.getTranslateY();
-            });
-
-            node.setOnMouseDragged(e-> {
-                node.toFront();
-                node.setTranslateX(e.getSceneX()-startX);
-                node.setTranslateY(e.getSceneY()-startY);
-            });
-        }
-        getGrid().setOnMousePressed(e-> {
-            System.out.println("tiklandi grid");
-            for (Tile tile:
-                 tiles) {
-                if (tile.equals(e.getSource())) System.out.println(tile.toString());;
-            }
-        });
-    }*/
-
 
     public GridPane getGrid() {
         return grid;
@@ -151,6 +134,7 @@ public class Game {
 
                 tile2d[row][column] = img;
                 grid.add(img, column, row);
+                makeDraggable(img);
 
             }
         }
@@ -190,18 +174,34 @@ public class Game {
         return colNum;
     }
 
-    private void moveTiles(Tile current, Tile target) {
+    private void moveTiles(Tile current, Tile target){
     //Getting indexes of current tile
     int currentRow = GridPane.getRowIndex(current);
     int currentCol = GridPane.getColumnIndex(current);
     int targetRow = GridPane.getRowIndex(target);
     int targetCol = GridPane.getColumnIndex(target);
-    System.out.println("Curr" + currentRow + "|" + currentCol);
-    System.out.println("Target" + targetRow + "|" + targetCol);
+
+    int indexCur = currentRow*4+currentCol+1;
+    int indexTar = targetRow*4+targetCol+1;
+
+    Tile tempCur = current;
+
+    //tiles.set(indexCur, target);
+    //tiles.set(indexTar, tempCur);
 
     grid.getChildren().removeAll(current, target);
-    grid.add(target,currentCol,currentRow);
-    grid.add(current,targetCol,targetRow);
+    current.setTranslateX(startX);
+    current.setTranslateY(startY);
+    grid.add(current, targetCol, targetRow);
+    grid.add(target, currentCol, currentRow);
+    current.setTranslateX(0);
+    current.setTranslateY(0);
+    makeDraggable(current);
+    tile2d[targetRow][targetCol] = current;
+    tile2d[currentRow][currentCol] = target;
 
+
+    System.out.println("Curr" + currentRow + "|" + currentCol + "index: " + indexCur);
+    System.out.println("Target" + targetRow + "|" + targetCol + "index: " + indexTar);
     }
 }
