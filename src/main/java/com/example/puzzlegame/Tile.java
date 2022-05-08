@@ -3,11 +3,10 @@ package com.example.puzzlegame;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Tile{
+public class Tile extends ImageView{
     private int id; // tile's id number
     private String type; // tile's type
     private String property;// tile's property
-    private ImageView image;// the image of the tile
 
 
     //No-Arg Constructor
@@ -17,7 +16,7 @@ public class Tile{
         setTileId(tile.id);
         setType(tile.type);
         setProperty(tile.property);
-        setImage(tile.image);
+        setImage(tile.getImage());
     }
     //Constructor with attributions
     public Tile(int id, String type, String property) {
@@ -56,70 +55,69 @@ public class Tile{
         this.property = property;
     }
 
-    public void setImage(ImageView image) {
-        this.image = image;
-    }
-
-    public ImageView getImage() {
-        return image;
-    }
-
     //Finding and setting the image of tile
     private void findImage() {
 
         if (type.equalsIgnoreCase("Starter")) { // blue starter
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView(new Image(getClass().getResource("/StarterVertical.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/StarterVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView(new Image(getClass().getResource("/StarterHorizontal.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/StarterHorizontal.jpg").toString()));
 
             }
 
         } else if (type.equalsIgnoreCase("End")) { // red end
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView(new Image(getClass().getResource("/EndVertical.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/EndVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView(new Image(getClass().getResource("/EndHorizontal.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/EndHorizontal.jpg").toString()));
 
             }
         } else if (type.equalsIgnoreCase("Empty")) {
             if (property.equalsIgnoreCase("none")) { // grey pile
-                image = new ImageView(new Image(getClass().getResource("/EmptyNone.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/EmptyNone.jpg").toString()));
             } else if (property.equalsIgnoreCase("Free")) {
-                image = new ImageView(new Image(getClass().getResource("/EmptyFree.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/EmptyFree.jpg").toString()));
 
             }
         } else if (type.equalsIgnoreCase("PipeStatic")) { // fix blue pile
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView(new Image(getClass().getResource("/PipeStaticVertical.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/PipeStaticVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView(new Image(getClass().getResource("/PipeStaticHorizontal.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/PipeStaticHorizontal.jpg").toString()));
             }
 
         } else if (type.equalsIgnoreCase("Pipe")) {
             if (property.equalsIgnoreCase("Vertical")) {
-                image = new ImageView(new Image(getClass().getResource("/PipeVertical.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/PipeVertical.jpg").toString()));
 
             } else if (property.equalsIgnoreCase("Horizontal")) {
-                image = new ImageView(new Image(getClass().getResource("/PipeHorizontal.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/PipeHorizontal.jpg").toString()));
             }else if (property.equalsIgnoreCase("00")) {
-                image = new ImageView(new Image(getClass().getResource("/Pipe00.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/Pipe00.jpg").toString()));
             }else if (property.equalsIgnoreCase("01")) {
-                image = new ImageView(new Image(getClass().getResource("/Pipe01.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/Pipe01.jpg").toString()));
             }else if (property.equalsIgnoreCase("10")) {
-                image = new ImageView(new Image(getClass().getResource("/Pipe10.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/Pipe10.jpg").toString()));
             }else if (property.equalsIgnoreCase("11")) {
-                image = new ImageView(new Image(getClass().getResource("/Pipe11.jpg").toString()));
+                this.setImage(new Image(getClass().getResource("/Pipe11.jpg").toString()));
             }
         }
+    }
+
+    public void copy(Tile tile) {
+        setTileId(tile.getTileId());
+        setType(tile.getType());
+        setProperty(tile.getProperty());
+        setImage(tile.getImage());
     }
 
     //To String Method
     @Override
     public String toString() {
-        return "Id: " + id + " Property: " + property + "Type: " + type ;
+        return "Id: " + id + " Property: " + property + " Type: " + type ;
     }
 }
