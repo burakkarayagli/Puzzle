@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 public class Game {
 
-    public static int moveCounter = 0;
+    public int moveCounter = 0;
     private ArrayList<Tile> tiles;
     GridPane grid;
     private final int rowNum = 4;
@@ -55,7 +55,7 @@ public class Game {
             });
 
             tile.setOnMouseDragged(e -> {
-                //TODO Sinirlardan disari cikarmayi engelle
+                //TODO Sinirlardan disari cikarmayi engelle bir de suruklemeye baslayinca soluk bir tile ciksin
                 tile.setTranslateX(e.getSceneX()-startX);
                 tile.setTranslateY(e.getSceneY()-startY);
             });
@@ -134,6 +134,7 @@ public class Game {
 
             }
         }
+        grid.setStyle("-fx-background-color:#4f4f4f");
         return grid;
     }
 
