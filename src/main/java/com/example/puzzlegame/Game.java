@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ import java.util.Scanner;
 
 public class Game {
 
+    public static int moveCounter = 0;
     private ArrayList<Tile> tiles;
-
     GridPane grid;
     private final int rowNum = 4;
     private final int colNum = 4;
@@ -32,13 +33,8 @@ public class Game {
         grid = createGame(level);
 
     }
-
-
-
     private double startX, startY;
     private void makeDraggable(Tile tile) {
-
-
         //If tile is not (Starter, End, Pipestatic, Free)
         if (!(tile.getType().equalsIgnoreCase("Starter") ||
                 tile.getType().equalsIgnoreCase("End") ||
@@ -90,8 +86,8 @@ public class Game {
                 }
 
 
-                System.out.println("Satir" + gridIndexFinder(targetX,targetY)[0]);
-                System.out.println("Sutun" + gridIndexFinder(targetX,targetY)[1]);
+                //System.out.println("Satir" + gridIndexFinder(targetX,targetY)[0]);
+                //System.out.println("Sutun" + gridIndexFinder(targetX,targetY)[1]);
 
 
 
@@ -174,34 +170,42 @@ public class Game {
         return colNum;
     }
 
-    private void moveTiles(Tile current, Tile target){
-    //Getting indexes of current tile
-    int currentRow = GridPane.getRowIndex(current);
-    int currentCol = GridPane.getColumnIndex(current);
-    int targetRow = GridPane.getRowIndex(target);
-    int targetCol = GridPane.getColumnIndex(target);
-
-    int indexCur = currentRow*4+currentCol+1;
-    int indexTar = targetRow*4+targetCol+1;
-
-    Tile tempCur = current;
-
-    //tiles.set(indexCur, target);
-    //tiles.set(indexTar, tempCur);
-
-    grid.getChildren().removeAll(current, target);
-    current.setTranslateX(startX);
-    current.setTranslateY(startY);
-    grid.add(current, targetCol, targetRow);
-    grid.add(target, currentCol, currentRow);
-    current.setTranslateX(0);
-    current.setTranslateY(0);
-    makeDraggable(current);
-    tile2d[targetRow][targetCol] = current;
-    tile2d[currentRow][currentCol] = target;
-
-
-    System.out.println("Curr" + currentRow + "|" + currentCol + "index: " + indexCur);
-    System.out.println("Target" + targetRow + "|" + targetCol + "index: " + indexTar);
+    public int getMoveCounter() {
+        return moveCounter;
     }
+
+    private void moveTiles(Tile current, Tile target){
+        //Getting indexes of current tile
+        int currentRow = GridPane.getRowIndex(current);
+        int currentCol = GridPane.getColumnIndex(current);
+        int targetRow = GridPane.getRowIndex(target);
+        int targetCol = GridPane.getColumnIndex(target);
+
+        int indexCur = currentRow*4+currentCol+1;
+        int indexTar = targetRow*4+targetCol+1;
+
+        Tile tempCur = current;
+
+        //tiles.set(indexCur, target);
+        //tiles.set(indexTar, tempCur);
+
+        grid.getChildren().removeAll(current, target);
+        current.setTranslateX(startX);
+        current.setTranslateY(startY);
+        grid.add(current, targetCol, targetRow);
+        grid.add(target, currentCol, currentRow);
+        current.setTranslateX(0);
+        current.setTranslateY(0);
+        makeDraggable(current);
+        tile2d[targetRow][targetCol] = current;
+        tile2d[currentRow][currentCol] = target;
+
+
+        //System.out.println("Curr" + currentRow + "|" + currentCol + "index: " + indexCur);
+        //System.out.println("Target" + targetRow + "|" + targetCol + "index: " + indexTar);
+        moveCounter++;
+
+        Main.MoveCount.setText("Move Count: " + getMoveCounter());
+    }
+
 }
