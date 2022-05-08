@@ -28,13 +28,16 @@ public class Main extends Application {
         HBox control = new HBox();
         Button buttonPrev = new Button("Prev Level");
         Button buttonNext = new Button("Next Level");
+        Button button1 = new Button("Next Level");
+        Button button2 = new Button("Next Level");
+        Button button3 = new Button("Next Level");
 
         control.setAlignment(Pos.CENTER);
-        buttonNext.setAlignment(Pos.CENTER);
+        control.setSpacing(50);
 
-        control.getChildren().addAll(buttonPrev,buttonNext);
+        control.getChildren().addAll(buttonPrev,buttonNext,button1,button2,button3);
 
-        Game game = new Game(Game.LevelReader("level6.txt"));
+        Game game = new Game(Game.LevelReader("level2.txt"));
         Game game2 = new Game(Game.LevelReader("level2.txt"));
 
         Tile starter = new Tile(5, "Starter", "Vertical");
@@ -47,7 +50,7 @@ public class Main extends Application {
 
         control.setPrefHeight(100);
 
-        Scene scene = new Scene(borderPane,700,700);
+        Scene scene = new Scene(borderPane,600,700);
         stage.setResizable(true);
 
 
