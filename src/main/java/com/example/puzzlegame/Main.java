@@ -9,10 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -63,6 +60,7 @@ public class Main extends Application {
         control.setAlignment(Pos.CENTER);
         control.setSpacing(50);
         control.getChildren().addAll(buttonPrev,buttonNext,MoveCount);
+        control.setBackground(Background.fill(Color.AQUA));
 
 
         BorderPane borderPane = new BorderPane();
@@ -71,7 +69,7 @@ public class Main extends Application {
         control.setPrefHeight(50);
 
         Scene scene = new Scene(borderPane,600,650);
-        stage.setResizable(true);
+        stage.setResizable(false);
 
 
 
