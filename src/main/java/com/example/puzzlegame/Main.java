@@ -49,11 +49,6 @@ public class Main extends Application {
             gameBoardsList.add(new Game(level));
         }
 
-
-
-
-
-
         HBox control = new HBox();
         Button buttonPrev = new Button("Prev Level");
         Button buttonNext = new Button("Next Level");
@@ -61,26 +56,22 @@ public class Main extends Application {
         control.setSpacing(50);
         control.getChildren().addAll(buttonPrev,buttonNext,MoveCount);
         control.setBackground(Background.fill(Color.AQUA));
+        control.setPrefHeight(50);
+
+        //Setting first level
+        Game game = gameBoardsList.get(0);
 
 
         BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(game.getGrid());
         borderPane.setBottom(control);
-
-        control.setPrefHeight(50);
 
         Scene scene = new Scene(borderPane,600,650);
         stage.setResizable(false);
 
 
-
-        //Setting first level
-        Game game = gameBoardsList.get(0);
         currentLevelInt = 0;
-        borderPane.setCenter(game.getGrid());
-
-
-
-
+        //EventHandlers for buttons
         EventHandler<ActionEvent> Next = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 //If the level isn't the last level
@@ -110,11 +101,7 @@ public class Main extends Application {
         buttonPrev.setOnAction(Prev);
 
 
-
-
-
         stage.setTitle("Level " + 1);
-
         stage.setScene(scene);
         stage.show();
     }

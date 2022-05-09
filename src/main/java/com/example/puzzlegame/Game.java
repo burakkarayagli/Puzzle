@@ -60,15 +60,15 @@ public class Game {
             });
 
             tile.setOnMouseEntered(e -> {
-                //System.out.println("Row: " + GridPane.getRowIndex(tile));
-                //System.out.println("Column: " + GridPane.getColumnIndex(tile));
                 System.out.println(tile.toString());
             });
 
+
             tile.setOnMouseDragged(e -> {
-                //TODO Sinirlardan disari cikarmayi engelle bir de suruklemeye baslayinca soluk bir tile ciksin
-                tile.setTranslateX(e.getSceneX()-startX);
-                tile.setTranslateY(e.getSceneY()-startY);
+                if(e.getSceneX()<=getGrid().getWidth()
+                        && e.getSceneX()>=0) tile.setTranslateX(e.getSceneX()-startX);
+                if(e.getSceneY()<=getGrid().getHeight()
+                        && e.getSceneY()>=0) tile.setTranslateY(e.getSceneY()-startY);
             });
 
             tile.setOnMouseReleased(e -> {
