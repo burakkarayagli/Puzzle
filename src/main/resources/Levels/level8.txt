@@ -1,6 +1,6 @@
-1,Starter,Vertical
-2,Pipe,10
-3,Empty,none
+1,Pipe,11
+2,Pipe,Horizontal
+3,Starter,Horizontal
 4,Empty,none
 5,Pipe,Vertical
 6,Empty,none

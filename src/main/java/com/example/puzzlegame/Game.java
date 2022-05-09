@@ -1,6 +1,8 @@
 package com.example.puzzlegame;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -29,21 +31,31 @@ public class Game {
     private final int rowNum = 4;
     private final int colNum = 4;
 
-    private Circle ball;
-
     private final double tileSize = 150;
     private Tile[][] tile2d = new Tile[rowNum][colNum];
+    private double ycoordinate; // tile's y coordinate on the pane
+    private double xcoordinate; // tile's x coordinate on the pane
+
+    private Circle ball;
 
     public Game(ArrayList<Tile> level) throws Exception {
         tiles = level;
         grid = createGame(level);
-        addBall();
 
+        Tile startTile = null;
+        for (Tile tile:
+             level) {
+            if (tile.getType().equalsIgnoreCase("Starter")) {
+                startTile = tile;
+            }
+        }
+
+        setCircleGame(startTile);
     }
     private double startX, startY;
     private void makeDraggable(Tile tile) {
         //If tile is not (Starter, End, Pipestatic, Free)
-        if (true || !(tile.getType().equalsIgnoreCase("Starter") ||
+        if (true||!(tile.getType().equalsIgnoreCase("Starter") ||
                 tile.getType().equalsIgnoreCase("End") ||
                 tile.getType().equalsIgnoreCase("PipeStatic") ||
                 tile.getProperty().equalsIgnoreCase("Free"))) {
@@ -59,6 +71,7 @@ public class Game {
             tile.setOnMouseEntered(e -> {
                 //System.out.println("Row: " + GridPane.getRowIndex(tile));
                 //System.out.println("Column: " + GridPane.getColumnIndex(tile));
+                System.out.println(tile.toString());
             });
 
             tile.setOnMouseDragged(e -> {
@@ -81,7 +94,7 @@ public class Game {
 
 
 
-                if(true || targetTile.getProperty().equalsIgnoreCase("Free") &&
+                if(targetTile.getProperty().equalsIgnoreCase("Free") &&
                         ((targetCol == currentCol && (targetRow == currentRow+1 || targetRow == currentRow-1)) ||
                          (targetRow == currentRow && (targetCol == currentCol+1 || targetCol == currentCol-1)))) {
                     moveTiles(tile, targetTile);
@@ -216,111 +229,161 @@ public class Game {
         Main.MoveCount.setText("Move Count: " + getMoveCounter());
         //createPath(tile2d);
 
+        double xcoordinate = 0;
+        double ycoordinate = 0;
+        Road road = new Road(tiles);
+        System.out.println("======================================");
+        System.out.println(road);
+        System.out.println("======================================");
+        // Check whether there is an appropriate path
+        if (road.levelRoad()) {
+//            System.out.println("======================================");
+//            System.out.println(road);
+//            System.out.println("======================================");
+            //System.out.println(fileName);
+            //whichLevel(fileName);
+            ArrayList<LineTo> lines = new ArrayList<LineTo>();
+
+            System.out.println(grid.getWidth());
+
+            double x = grid.getWidth() / 8;
+            double y = grid.getHeight() / 8;
+
+            xcoordinate = 0;
+            ycoordinate = 0;
+
+
+
+            // Create a path using the tiles in roadTiles ArrayList
+            for (Tile tile1 : road.getRoadTiles()) {
+
+                if (!tile1.getType().equalsIgnoreCase("Empty")) {
+
+                    int id = tile1.getTileId();
+
+                    int tile1row = tileIndexFinder(tile1)[0];
+                    int tile1col = tileIndexFinder(tile1)[1];
+
+                    xcoordinate = getXdistance(tile1row,tile1col);
+                    ycoordinate = getYdistance(tile1row,tile1col);
+
+                    // Create a lineTo using a and y coordinates
+                    LineTo line = new LineTo(xcoordinate, ycoordinate);
+                    // Keep the lines in lines ArrayList
+                    lines.add(line);
+
+                }
+
+            }
+            // Get the starter tile's id and set a starting point
+            double startx = getXCoordinates(road.getStart().getTileId(), x);
+            double endx = getYCoordinates(road.getStart().getTileId(), y);
+
+            Path path = new Path();
+            MoveTo moveTo = new MoveTo(75, 75);
+
+            path.getElements().add(moveTo);
+
+            for (LineTo line1 : lines) {
+
+                // Add each element of lines ArrayList to path
+                path.getElements().add(line1);
+            }
+
+            // Create a circle (ball) for the animation
+            Circle circle = new Circle(startx, endx, 12, Color.ORANGERED);
+            PathTransition pt = new PathTransition();
+            // Set the duration of the animation
+            pt.setDuration(Duration.millis(10000));
+            pt.setNode(circle);
+            // Set the path which is created using lineTo
+            pt.setPath(path);
+            pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+            grid.getChildren().remove(ball);
+            circle.setManaged(false);
+            // Add the circle(ball) to pane
+            grid.getChildren().add(circle);
+            pt.play();
+
+            /*// Create a timeline for the end of the level
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000)));
+
+            timeline.play();
+            timeline.setOnFinished(e -> {
+                System.out.println("Number of moves: " + getMoveCounter());
+                System.out.println("You made it!! Time for " + fileName + " now!");
+                game.setTop(new Label(fileName));
+                // Reset number of moves
+                moveNumber = 0;
+                pane.getChildren().clear();
+                game.getChildren().remove(pane);
+                tiles.clear();
+                setBoard(fileName, tiles);
+
+            });*/
+        }
+
 
     }
 
-    public void addBall() {
-        //Creating ball
-        ball = new Circle();
+    private double getXCoordinates(int id, double x) {
 
-        ball.setRadius(13.5);
-        ball.setCenterX(tileSize);
-        ball.setCenterY(tileSize/2);
-        ball.setFill(Color.YELLOW);
-        ball.setStrokeWidth(0.2);
-        ball.setStroke(Color.BLACK);
-        getGrid().getChildren().add(ball);
+        int order = 1;
+        for (int i = 0; i < tiles.size(); i++) {
+            if (tiles.get(i).getTileId() == id) order = i+1;
+        }
 
+
+        System.out.println("==========================id:" + id + "order:"+ order);
+        if (order % 4 == 1)
+            xcoordinate = x;
+        else if (order % 4 == 2)
+            xcoordinate = 3 * x;
+        else if (order % 4 == 3)
+            xcoordinate = 5 * x;
+        else if (order % 4 == 0)
+            xcoordinate = 7 * x;
+
+        return xcoordinate;
     }
 
-    public boolean createPath(Tile[][] tile2d) {
+    private double getYCoordinates(int id, double y) {
 
-
-        Tile starterTile = null, endTile = null;
-
-        //Finding the starter and end tile
-        for (int row = 0; row < rowNum; row++) {
-            for (int col = 0; col < colNum; col++) {
-                if (tile2d[row][col].getType().equalsIgnoreCase("Starter")) {
-                    starterTile = tile2d[row][col];
-                }
-                if (tile2d[row][col].getType().equalsIgnoreCase("End")) {
-                    endTile = tile2d[row][col];
-                }
-            }
+        int order = 1;
+        for (int i = 0; i < tiles.size(); i++) {
+            if (tiles.get(i).getTileId() == id) order = i+1;
         }
 
-        int rowStarter = tileIndexFinder(starterTile)[0];
-        int colStarter = tileIndexFinder(starterTile)[1];
+        if (order <= 4)
+            ycoordinate = y;
+        else if (order > 4 && id <= 8)
+            ycoordinate = 3 * y;
+        else if (order > 8 && id <= 12)
+            ycoordinate = 5 * y;
+        else if (order > 12 && id <= 16)
+            ycoordinate = 7 * y;
+        return ycoordinate;
+    }
 
-        Path path = new Path();
+    private void setCircleGame(Tile start) {
 
-        path.getElements().add(new MoveTo(rowStarter*tileSize+tileSize/2,
-                colStarter*tileSize+tileSize/2));
-
-        Tile current = starterTile;
-        boolean a = true;
-        while (a) {
-
-            int curRow = tileIndexFinder(current)[0];
-            int curCol = tileIndexFinder(current)[1];
-//            Tile upTile = tile2d[curRow-1][curCol];
-//            Tile downTile = tile2d[curRow+1][curCol];
-//            Tile rightTile = tile2d[curRow][curCol+1];
-//            Tile leftTile = tile2d[curRow][curCol-1];
-
-            //Starter Vertical
-            if (current.getType().equalsIgnoreCase("Starter") &&
-                    current.getProperty().equalsIgnoreCase("Vertical")) {
-                    Tile downTile = tile2d[curRow+1][curCol];
-                    path.getElements().add(new LineTo(rowStarter*tileSize+tileSize/2, colStarter*tileSize+tileSize));
-
-                if (downTile.getProperty().equalsIgnoreCase("Vertical")) {
-                    double downX = curRow+1 * tileSize + tileSize/2;
-                    double downY = curRow+1 * tileSize + tileSize;
-                    path.getElements().add(new LineTo(downX, downY));
-
-                    current = downTile;
-
-                }
-
-                else if (downTile.getProperty().equalsIgnoreCase("00")) {
-
-                }
-
-                else if (downTile.getProperty().equalsIgnoreCase("01")) {
-
-                }
-
-            }
-
-            else if (current.getProperty().equalsIgnoreCase("Vertical")) {
-                Tile downTile = tile2d[curRow+1][curCol];
-
-                if (downTile.getProperty().equalsIgnoreCase("Vertical")) {
-                    double downX = curRow+1 * tileSize + tileSize/2;
-                    double downY = curRow+1 * tileSize + tileSize;
-                    path.getElements().add(new LineTo(downX, downY));
-                    a = false;
-
-                }
-
-            }
-
-        }
-
-        PathTransition pathTransition = new PathTransition();
-
-        pathTransition.setPath(path);
-        pathTransition.setNode(ball);
-        pathTransition.setDuration(Duration.seconds(3));
-        pathTransition.play();
+        grid.layout();
+        double x = grid.getBoundsInLocal().getWidth() / 8; // x width of a tile
+        double y = grid.getBoundsInLocal().getHeight() / 8; // y height of a tile
+        double startx = getXCoordinates(start.getTileId(), x); // start x coordinate
+        double endx = getYCoordinates(start.getTileId(), y); // start y coordinates
+        ball = new Circle(startx, endx, 12, Color.ORANGERED);//setting the circle object
+        ball.setManaged(false);
+        grid.getChildren().add(ball);
+    }
 
 
 
+    private double getXdistance(int row, int column) {
+        return column*tileSize+tileSize/2;
+    }
 
-
-
-        return false;
+    private  double getYdistance(int row, int column) {
+        return row*tileSize+tileSize/2;
     }
 }
