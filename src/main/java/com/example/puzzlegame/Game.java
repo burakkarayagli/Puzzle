@@ -52,7 +52,6 @@ public class Game {
                 tile.getProperty().equalsIgnoreCase("Free"))) {
 
             tile.setOnMousePressed(e -> {
-                //System.out.println(tile + "bastin");
                 startX = e.getSceneX() - tile.getTranslateX();
                 startY = e.getSceneY() - tile.getTranslateY();
                 tile.setEffect(new Glow());
@@ -60,14 +59,13 @@ public class Game {
             });
 
             tile.setOnMouseEntered(e -> {
-                System.out.println(tile.toString());
+                //System.out.println(tile.toString());
             });
 
-
             tile.setOnMouseDragged(e -> {
-                if(e.getSceneX()<=getGrid().getWidth()
+                if(e.getSceneX()<=tileSize*colNum
                         && e.getSceneX()>=0) tile.setTranslateX(e.getSceneX()-startX);
-                if(e.getSceneY()<=getGrid().getHeight()
+                if(e.getSceneY()<=tileSize*rowNum
                         && e.getSceneY()>=0) tile.setTranslateY(e.getSceneY()-startY);
             });
 
@@ -80,14 +78,17 @@ public class Game {
                 int targetRow = gridIndexFinder(targetX,targetY)[0];
                 int targetCol = gridIndexFinder(targetX,targetY)[1];
 
-                Tile targetTile = tile2d[targetRow][targetCol];
+                Tile targetTile = null;
 
+                try {
+                    targetTile = tile2d[targetRow][targetCol];
+                }
+                catch (Exception e2) {
+                    System.out.println("Mouse isn't on tile");
+                }
 
-
-
-                if(targetTile.getProperty().equalsIgnoreCase("Free") &&
-                        ((targetCol == currentCol && (targetRow == currentRow+1 || targetRow == currentRow-1)) ||
-                         (targetRow == currentRow && (targetCol == currentCol+1 || targetCol == currentCol-1)))) {
+                if(targetTile != null && targetTile.getProperty().equalsIgnoreCase("Free") &&
+                        ((targetCol == currentCol && (targetRow == currentRow+1 || targetRow == currentRow-1)) || (targetRow == currentRow && (targetCol == currentCol+1 || targetCol == currentCol-1)))) {
                     moveTiles(tile, targetTile);
                 }
 
@@ -96,14 +97,7 @@ public class Game {
                     tile.setTranslateY(0);
                 }
 
-
-                //System.out.println("Satir" + gridIndexFinder(targetX,targetY)[0]);
-                //System.out.println("Sutun" + gridIndexFinder(targetX,targetY)[1]);
-
-
-
                 tile.setEffect(null);
-                //System.out.println(tile + "biraktin");
             });
 
         }
@@ -112,7 +106,6 @@ public class Game {
     public GridPane getGrid() {
         return grid;
     }
-
     public static int[] gridIndexFinder(double targetX, double targetY) {
         int row = (int)(targetY/150);
         int column = (int)(targetX/150);
@@ -211,10 +204,6 @@ public class Game {
         tile2d[currentRow][currentCol] = target;
 
 
-
-
-        //System.out.println("Curr" + currentRow + "|" + currentCol + "index: " + indexCur);
-        //System.out.println("Target" + targetRow + "|" + targetCol + "index: " + indexTar);
         moveCounter++;
 
         Main.MoveCount.setText("Move Count: " + getMoveCounter());
@@ -223,19 +212,9 @@ public class Game {
         double xcoordinate = 0;
         double ycoordinate = 0;
         Track road = new Track(tiles);
-        System.out.println("======================================");
-        System.out.println(road);
-        System.out.println("======================================");
         // Check whether there is an appropriate path
         if (road.levelRoad()) {
-//            System.out.println("======================================");
-//            System.out.println(road);
-//            System.out.println("======================================");
-            //System.out.println(fileName);
-            //whichLevel(fileName);
             ArrayList<LineTo> lines = new ArrayList<LineTo>();
-
-            System.out.println(grid.getWidth());
 
             double x = grid.getWidth() / 8;
             double y = grid.getHeight() / 8;
@@ -298,30 +277,9 @@ public class Game {
                 pt.play();
             }
 
-
             passed = true;
-
-            // Create a timeline for the end of the level
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000)));
-
-            //TODO sil
-            timeline.play();
-            timeline.setOnFinished(e -> {
-                //System.out.println("Number of moves: " + getMoveCounter());
-                System.out.println("You made it!! Time for " + "level555" + " now!");
-                /*game.setTop(new Label(fileName));
-                // Reset number of moves
-                pane.getChildren().clear();
-                game.getChildren().remove(pane);
-                tiles.clear();
-                setBoard(fileName, tiles);*/
-
-            });
         }
-
-
     }
-
     private double getXCoordinates(int id, double x) {
 
         int order = 1;
@@ -330,7 +288,6 @@ public class Game {
         }
 
 
-        System.out.println("==========================id:" + id + "order:"+ order);
         if (order % 4 == 1)
             xcoordinate = x;
         else if (order % 4 == 2)
@@ -372,8 +329,6 @@ public class Game {
         ball.setManaged(false);
         grid.getChildren().add(ball);
     }
-
-
 
     private double getXdistance(int row, int column) {
         return column*tileSize+tileSize/2;
