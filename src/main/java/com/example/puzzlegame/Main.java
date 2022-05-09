@@ -14,6 +14,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -33,6 +35,8 @@ public class Main extends Application {
     private ArrayList<Game> gameBoardsList = new ArrayList<>();
     @Override
     public void start(Stage stage) throws Exception {
+
+        MoveCount.setFont(Font.font("Times New Roman", FontWeight.BOLD, 18));
 
         File levelFolder = new File("src/main/resources/Levels");
         File[] listOfFiles = levelFolder.listFiles();
@@ -64,9 +68,9 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setBottom(control);
 
-        control.setPrefHeight(100);
+        control.setPrefHeight(50);
 
-        Scene scene = new Scene(borderPane,600,700);
+        Scene scene = new Scene(borderPane,600,650);
         stage.setResizable(true);
 
 
@@ -76,23 +80,17 @@ public class Main extends Application {
         currentLevelInt = 0;
         borderPane.setCenter(game.getGrid());
 
-        System.out.println(currentLevelInt);
-        System.out.println(gameBoardsList.size());
+
+
 
         EventHandler<ActionEvent> Next = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-
                 //If the level isn't the last level
-                if (currentLevelInt != gameBoardsList.size()-1) {
+                if (currentLevelInt != gameBoardsList.size()-1 && gameBoardsList.get(currentLevelInt).isPassed()) {
                     borderPane.setCenter(gameBoardsList.get(++currentLevelInt).getGrid());
-                }
-
-                if (currentLevelInt == gameBoardsList.size()-2){
-                    //control.getChildren().remove(buttonNext);
-                }
-
-                else if (currentLevelInt == 1) {
-                    //control.getChildren().add(buttonPrev);
+                    int levelnumber = currentLevelInt+1;
+                    stage.setTitle("Level " + levelnumber);
+                    Main.MoveCount.setText("Move Count: " + gameBoardsList.get(currentLevelInt).getMoveCounter());
                 }
             }
         };
@@ -103,23 +101,22 @@ public class Main extends Application {
                 //If the level isn't the first level
                 if (currentLevelInt != 0) {
                     borderPane.setCenter(gameBoardsList.get(--currentLevelInt).getGrid());
+                    int levelnumber = currentLevelInt+1;
+                    stage.setTitle("Level " + levelnumber);
+                    Main.MoveCount.setText("Move Count: " + gameBoardsList.get(currentLevelInt).getMoveCounter());
                 }
-
-                if(currentLevelInt == 1) {
-                    //control.getChildren().remove(buttonPrev);
-                }
-                else if (currentLevelInt == gameBoardsList.size()-1) {
-                    //control.getChildren().add(buttonNext);
-                }
-
-
             }
         };
 
         buttonNext.setOnAction(Next);
         buttonPrev.setOnAction(Prev);
 
-        stage.setTitle("Hello!");
+
+
+
+
+        stage.setTitle("Level " + 1);
+
         stage.setScene(scene);
         stage.show();
     }
@@ -128,5 +125,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch();
     }
-}
+    }
 

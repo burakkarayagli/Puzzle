@@ -1,5 +1,5 @@
 1,Starter,Vertical
-2,Pipe,10
+2,Empty,none
 3,Empty,none
 4,Empty,none
 5,Pipe,Vertical

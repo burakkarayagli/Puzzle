@@ -1,6 +1,8 @@
 package com.example.puzzlegame;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.scene.effect.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -23,6 +25,7 @@ public class Game {
     private Tile[][] tile2d = new Tile[rowNum][colNum];
     private double ycoordinate; // tile's y coordinate on the pane
     private double xcoordinate; // tile's x coordinate on the pane
+    private boolean passed = false;
 
     private Circle ball;
 
@@ -278,37 +281,42 @@ public class Game {
                 path.getElements().add(line1);
             }
 
-            // Create a circle (ball) for the animation
-            Circle circle = new Circle(startx, starty, 20, Color.GOLD);
-            PathTransition pt = new PathTransition();
-            // Set the duration of the animation
-            pt.setDuration(Duration.millis(3000));
-            pt.setNode(circle);
-            // Set the path which is created using lineTo
-            pt.setPath(path);
-            pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-            grid.getChildren().remove(ball);
-            circle.setManaged(false);
-            // Add the circle(ball) to pane
-            grid.getChildren().add(circle);
-            pt.play();
+            if (!isPassed()) {
+                // Create a circle (ball) for the animation
+                Circle circle = new Circle(startx, starty, 20, Color.GOLD);
+                PathTransition pt = new PathTransition();
+                // Set the duration of the animation
+                pt.setDuration(Duration.millis(3000));
+                pt.setNode(circle);
+                // Set the path which is created using lineTo
+                pt.setPath(path);
+                pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+                grid.getChildren().remove(ball);
+                circle.setManaged(false);
+                // Add the circle(ball) to pane
+                grid.getChildren().add(circle);
+                pt.play();
+            }
 
-            /*// Create a timeline for the end of the level
+
+            passed = true;
+
+            // Create a timeline for the end of the level
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000)));
 
+            //TODO sil
             timeline.play();
             timeline.setOnFinished(e -> {
-                System.out.println("Number of moves: " + getMoveCounter());
-                System.out.println("You made it!! Time for " + fileName + " now!");
-                game.setTop(new Label(fileName));
+                //System.out.println("Number of moves: " + getMoveCounter());
+                System.out.println("You made it!! Time for " + "level555" + " now!");
+                /*game.setTop(new Label(fileName));
                 // Reset number of moves
-                moveNumber = 0;
                 pane.getChildren().clear();
                 game.getChildren().remove(pane);
                 tiles.clear();
-                setBoard(fileName, tiles);
+                setBoard(fileName, tiles);*/
 
-            });*/
+            });
         }
 
 
@@ -373,5 +381,9 @@ public class Game {
 
     private  double getYdistance(int row, int column) {
         return row*tileSize+tileSize/2;
+    }
+
+    public boolean isPassed() {
+        return passed;
     }
 }

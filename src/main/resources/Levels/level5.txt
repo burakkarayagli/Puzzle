@@ -14,7 +14,7 @@
 
 8,End,Vertical
 
-9,Pipe,01
+9,PipeStatic,01
 
 10,Pipe,Vertical
 
