@@ -43,7 +43,7 @@ public class Game {
     private double startX, startY;
     private void makeDraggable(Tile tile) {
         //If tile is not (Starter, End, Pipestatic, Free)
-        if (true||!(tile.getType().equalsIgnoreCase("Starter") ||
+        if (!(tile.getType().equalsIgnoreCase("Starter") ||
                 tile.getType().equalsIgnoreCase("End") ||
                 tile.getType().equalsIgnoreCase("PipeStatic") ||
                 tile.getProperty().equalsIgnoreCase("Free"))) {
@@ -142,7 +142,7 @@ public class Game {
 
             }
         }
-        grid.setStyle("-fx-background-color:#4f4f4f");
+        grid.setStyle("-fx-background-color:#2596be");
         return grid;
     }
 
@@ -265,10 +265,10 @@ public class Game {
             }
             // Get the starter tile's id and set a starting point
             double startx = getXCoordinates(road.getStart().getTileId(), x);
-            double endx = getYCoordinates(road.getStart().getTileId(), y);
+            double starty = getYCoordinates(road.getStart().getTileId(), y);
 
             Path path = new Path();
-            MoveTo moveTo = new MoveTo(75, 75);
+            MoveTo moveTo = new MoveTo(startx, starty);
 
             path.getElements().add(moveTo);
 
@@ -279,7 +279,7 @@ public class Game {
             }
 
             // Create a circle (ball) for the animation
-            Circle circle = new Circle(startx, endx, 12, Color.ORANGERED);
+            Circle circle = new Circle(startx, starty, 20, Color.GOLD);
             PathTransition pt = new PathTransition();
             // Set the duration of the animation
             pt.setDuration(Duration.millis(3000));
@@ -360,7 +360,7 @@ public class Game {
         double y = grid.getBoundsInLocal().getHeight() / 8; // y height of a tile
         double startx = getXCoordinates(start.getTileId(), x); // start x coordinate
         double endx = getYCoordinates(start.getTileId(), y); // start y coordinates
-        ball = new Circle(startx, endx, 12, Color.ORANGERED);//setting the circle object
+        ball = new Circle(startx, endx, 20, Color.GOLD);//setting the circle object
         ball.setManaged(false);
         grid.getChildren().add(ball);
     }
