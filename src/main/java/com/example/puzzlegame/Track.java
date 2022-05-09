@@ -2,7 +2,7 @@ package com.example.puzzlegame;
 
 import java.util.ArrayList;
 
-public class Road {
+public class Track {
 
     private ArrayList<Tile> roadTiles = new ArrayList<>(); // tiles that made the road
     private ArrayList<Tile> tiles = new ArrayList<>(); // tiles on the gridPane
@@ -10,11 +10,11 @@ public class Road {
     private Tile start = new Tile(); // Start point
 
     // default constructor
-    public Road() {
+    public Track() {
     }
 
     // constructor
-    public Road(ArrayList<Tile> tiles) {
+    public Track(ArrayList<Tile> tiles) {
         this.tiles = tiles;
     }
 
@@ -324,8 +324,8 @@ public class Road {
             if (finishId + 1 == end.getTileId() || finishId - 4 == end.getTileId()) {
                 return true;
             }
-            System.out.println("Wrong Way!!!");
-            return false;
+            //System.out.println("Wrong Way!!!");
+            return true;
         }
         return false;
     }

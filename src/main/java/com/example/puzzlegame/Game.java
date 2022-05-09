@@ -1,22 +1,10 @@
 package com.example.puzzlegame;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
-import javafx.scene.PointLight;
 import javafx.scene.effect.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -231,7 +219,7 @@ public class Game {
 
         double xcoordinate = 0;
         double ycoordinate = 0;
-        Road road = new Road(tiles);
+        Track road = new Track(tiles);
         System.out.println("======================================");
         System.out.println(road);
         System.out.println("======================================");
@@ -294,7 +282,7 @@ public class Game {
             Circle circle = new Circle(startx, endx, 12, Color.ORANGERED);
             PathTransition pt = new PathTransition();
             // Set the duration of the animation
-            pt.setDuration(Duration.millis(10000));
+            pt.setDuration(Duration.millis(3000));
             pt.setNode(circle);
             // Set the path which is created using lineTo
             pt.setPath(path);
