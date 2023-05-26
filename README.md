@@ -1,6 +1,11 @@
 # Roll The Ball
 
+<div align="center">
+  
 ![Roll The Ball Demo](preview/demo.gif)
+</div>
+
+
 
 ## Description
 Roll The Ball is a Java-based puzzle game where players need to navigate a ball through a maze to reach the goal. The game provides a challenging and engaging experience for users of all ages.
@@ -23,7 +28,6 @@ Roll The Ball is a Java-based puzzle game where players need to navigate a ball 
 ![Roll The Ball Level 3](preview/level3.png)
 ![Roll The Ball Level 4](preview/level4.png)
 ![Roll The Ball Level 5](preview/level5.png)
-![Roll The Ball Level 6](preview/level6.png)
 
 
 
